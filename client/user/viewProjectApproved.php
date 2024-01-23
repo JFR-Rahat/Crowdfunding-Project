@@ -12,16 +12,14 @@
         $projectId = $_GET['id'];
     }
 
-    if(!isset($_SESSION['projectDetails'])){
-        ?>
-        <script>
-            window.location = "../../contracts/getProjectDetails.php?id="+<?php echo $projectId;?>;
-        </script>
-        <?php
-    }
+    include_once("databaseConnect.php");
 
-    $project = (array)$_SESSION["projectDetails"][0];
-    extract($project);
+    $fetch = "SELECT * FROM `projects` WHERE id=$projectId AND projectStatus=0";
+    $query = mysqli_query($conn, $fetch);
+
+    $row = mysqli_fetch_assoc($query);
+
+    extract($row);
 
 
 ?>
@@ -116,41 +114,22 @@
             <div class="container">
                 <div class="row gx-5 align-item-center">
                     <div class="col-lg-7">
-                        <img src= "<?php echo "../../server/".$projectPhotoDir; ?>" alt="Error">
+                        <img src= "<?php echo "../../server/".$projectPhotoDir; ?>" alt="Error" style="height:40vh">
                     </div>
                     <div class="col-lg-5">
                         <h1><?php echo $projectTitle; ?></h1>
                         <div class="divider my-3"></div>
-                        <div>Raised Fund: <?php if($projectAmountRaised > 0) echo substr($projectAmountRaised, 0, strlen($projectAmountRaised)-15); else echo "0";?> Finney</div>
-                        <div>Goal Fund: <?php echo substr($projectFundingGoal, 0, strlen($projectFundingGoal)-15); ?> Finney</div>
-                        <div>Number of Funders: <?php echo $projectTotalContributors; ?></div>
+                        <div>Goal Fund: <?php echo $fundingGoal; ?> Finney</div>
                         <div>Start Time: <?php echo date("Y-m-d H:i:s", substr($projectStartTime, 0, 10)); ?></div>
                         <div>End Time: <?php echo date("Y-m-d H:i:s", substr($projectEndTime, 0, 10)); ?></div>
-                        <div>Project Owner: <?php echo $projectOwnerName; ?></div>
-                        <div>Owner Wallet: <?php echo $projectOwnerAddress; ?></div>
-                        <div class="mt-2 pt-2"><button class="btn btn-success fundButton" data-bs-toggle="modal" data-bs-target="#fundModal"
-                        <?php 
-                            if($projectOwnerAddress == $_SESSION["user"]["userAddress"] || time() >= $projectEndTime){
-                                // echo "disabled";
-                            }
-                            else{
-                                // echo "hidden";
-                            }
-                         ?>
-                        >Fund this project.</button></div>
-                        <div class="mt-2 pt-2"><button class="btn btn-success fundButton" data-bs-toggle="modal" data-bs-target="#claimModal" 
-                        <?php 
-                            if($projectOwnerAddress == $_SESSION["user"]["userAddress"]){
-                                echo "disabled";
-                            }
-                            else{
-                                echo "hidden";
-                            }
-                         ?>
-                         >Claim Fund.</button></div>
-
+                        <div>Category: <?php echo $projectCategory; ?></div>
+                        <div>Project Owner: <?php echo $ownerName; ?></div>
+                        <div>Owner Wallet: <?php echo $ownerAddress; ?></div>
                     </div>
                 </div>
+            </div>
+            <div class="container">
+                    <?php echo $projectStory;?>
             </div>
         </section>
 
@@ -216,7 +195,7 @@
                 <h5 class="text-center pt-3">CONTACT US</h5>
                 <div class="row">
                     <div class="col-lg-1">
-                        <img src="../Photos/crowdfundingLogo.jpg" alt="" style="height: 100px; width: 100px;">
+                        <img src="../../client/Photos/crowdfundingLogo.jpg" alt="" style="height: 100px; width: 100px;">
                     </div>
                     <div class="col-lg-7 pt-4">
                         <h6>Crowdfunding</h6>

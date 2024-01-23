@@ -14,6 +14,12 @@
                 </a>
             </li>
             <li class="nav-item">
+                <a class="nav-link" href="deletedProject.php">
+                    <span data-feather="loader"></span>
+                    Deleted Projects
+                </a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" href="approvedProject.php">
                     <span data-feather="bell"></span>
                     Approved Projects

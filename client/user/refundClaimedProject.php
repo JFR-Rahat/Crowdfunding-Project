@@ -83,17 +83,16 @@
                                     <th scope="col">Project End Time</th>
                                     <th scope="col">Fund Raised</th>
                                     <th scope="col">No. of Funders</th>
-                                    <th scope="col">My Funding</th>
                                     <th scope="col" colspan=3>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php
 
-                                    if(isset($_SESSION["fundedProjects"])){
-                                        if($_SESSION["fundedProjects"][0] != "Empty"){
+                                    if(isset($_SESSION["refundClaimedProjects"])){
+                                        if($_SESSION["refundClaimedProjects"][0] != "Empty"){
                                         
-                                            $projects = $_SESSION["fundedProjects"];
+                                            $projects = $_SESSION["refundClaimedProjects"];
 
                                             foreach($projects as $projectObj){
                                                 $project = (array)$projectObj;
@@ -111,7 +110,6 @@
                                                 <td scope="col"><?php echo date("Y-m-d H:i:s", substr($projectEndTime, 0, 10)); ?></td>
                                                 <td scope="col"><?php if($projectAmountRaised > 0) echo substr($projectAmountRaised, 0, strlen($projectAmountRaised)-15); else echo "0"; ?> Finney</td>
                                                 <td scope="col"><?php echo $projectTotalContributors; ?></td>
-                                                <td scope="col"><?php echo substr($projectMyFunding, 0, strlen($projectMyFunding)-15); ?> Finney</td>
                                                 <td><button type="button" class="btn btn-outline-success" disabled
                                                         onclick=claimRefund(<?php echo $projectId;?>)>Claim Refund</button></td>
                                                 <td><button type="button" class="btn btn-outline-info"
@@ -124,7 +122,7 @@
                                     else{
                                         ?>
                                         <script>
-                                            window.location = "../../contracts/getFundedProject.php";
+                                            window.location = "../../contracts/getRefundClaimedProject.php";
                                         </script>
                                         <?php
                                     }

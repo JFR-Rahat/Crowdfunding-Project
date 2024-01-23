@@ -94,7 +94,7 @@
                                     <td><?php echo date("Y-m-d H:i:s", substr($projectStartTime, 0, 10));?></td>
                                     <td><?php echo date("Y-m-d H:i:s", substr($projectEndTime, 0, 10));?></td>
                                     <td><button type="button" class="btn btn-outline-info" onclick=viewProject(<?php echo $id;?>)>View</button></td>
-                                    <td><button type="button" class="btn btn-outline-success" id="launchBtn" onclick=launchProject(<?php echo $id;?>)>Launch</button></td>
+                                    <td><button type="button" class="btn btn-outline-success" id="launchBtn" onclick=launchProject(<?php echo $id;?>)>Launch to Blockchain</button></td>
                                     <td><button type="button" class="btn btn-outline-danger" onclick=deleteProject(<?php echo $id;?>)>Delete</button></td>
                                 </tr>
 
@@ -121,7 +121,7 @@
             window.location = "deleteProject.php?id="+id;
         }
         function viewProject(id){
-            window.location = "viewProject.php?id="+id;
+            window.location = "viewProjectApproved.php?id="+id;
         }
     </script>
 

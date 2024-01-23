@@ -85,7 +85,7 @@
                             <tbody>
                                 <?php
 
-                                    $fetch = "SELECT * FROM `projectLaunchRequest` WHERE projectLaunchPending=1";
+                                    $fetch = "SELECT * FROM `projectLaunchRequest` WHERE projectLaunchPending=-1";
                                     $query = mysqli_query($conn, $fetch);
 
                                     while($row = mysqli_fetch_assoc($query)){
@@ -105,7 +105,6 @@
                                     <td><?php echo $fundingGoal;?> Finney</td>
                                     <td><?php echo $campaignDuration;?> Minutes</td>
                                     <td><button type="button" class="btn btn-outline-info" onclick=viewProject(<?php echo $id;?>)>View</button></td>
-                                    <td><button type="button" class="btn btn-outline-danger" onclick=deleteProject(<?php echo $id;?>)>Delete</button></td>
                                 </tr>
 
                                 <?php
@@ -123,9 +122,6 @@
     <script>
         function userLogOut() {
             window.location = "destroySession.php";
-        }
-        function deleteProject(id){
-            window.location = "deleteProject.php?id="+id;
         }
         function viewProject(id){
             window.location = "viewProjectSQL.php?id="+id;
