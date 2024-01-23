@@ -174,8 +174,8 @@
                                     <td><?php echo $projectCategory;?></td>
                                     <td><?php echo $projectStory;?></td>
                                     <td><?php echo $fundingGoal;?> Fenney</td>
-                                    <td><?php echo $projectStartTime;?></td>
-                                    <td><?php echo $projectEndTime;?></td>
+                                    <td><?php echo date("Y-m-d H:i:s", substr($projectStartTime, 0, 10)); ?></td>
+                                    <td><?php echo date("Y-m-d H:i:s", substr($projectEndTime, 0, 10)); ?></td>
                                     <td><button type="button" class="btn btn-outline-info" onclick=viewProject(<?php echo $id;?>)>View</button></td>
                                     <td><button type="button" class="btn btn-outline-success" disabled onclick=approveProject(<?php echo $id;?>)>Approved</button></td>
                                 </tr>
@@ -203,7 +203,7 @@
             window.location = "rejectProject.php?id="+id;
         }
         function viewProject(id){
-            window.location = "viewProject.php?id="+id;
+            window.location = "viewProjectApproved.php?id="+id;
         }
     </script>
 

@@ -202,7 +202,7 @@
             window.location = "rejectProject.php?id="+id;
         }
         function viewProject(id){
-            window.location = "viewProject.php?id="+id;
+            window.location = "viewProjectSQL.php?id="+id;
         }
     </script>
 

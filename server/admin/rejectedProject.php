@@ -175,7 +175,6 @@
                                     <td><?php echo $fundingGoal;?></td>
                                     <td><?php echo $campaignDuration;?></td>
                                     <td><button type="button" class="btn btn-outline-info" onclick=viewProject(<?php echo $id;?>)>View</button></td>
-                                    <td><button type="button" class="btn btn-outline-success" onclick=approveProject(<?php echo $id;?>)>Approve</button></td>
                                     <td><button type="button" class="btn btn-outline-danger" disabled onclick=rejectProject(<?php echo $id;?>)>Rejected</button></td>
                                 </tr>
 
@@ -195,14 +194,11 @@
         function adminSignOut() {
             window.location = "destroySession.php";
         }
-        function approveProject(id){
-            window.location = "approveProject.php?id="+id;
-        }
         function rejectProject(id){
             window.location = "rejectProject.php?id="+id;
         }
         function viewProject(id){
-            window.location = "viewProject.php?id="+id;
+            window.location = "viewProjectSQL.php?id="+id;
         }
     </script>
 
