@@ -129,12 +129,12 @@
         </section>
 
 
-        <!--Art Projects-->
+        <!--Ongoing Projects-->
         <section class="mt-5 pt-5">
             <div class="container">
                 <div class="row align-items-center">
                     <div class="col-12 intro-text">
-                        <h1>Art Projects</h1>
+                        <h1>Ongoing Projects</h1>
                     </div>
                 </div>
 
@@ -146,30 +146,34 @@
                     foreach($projects as $projectOb){
                         $project = (array)$projectOb;
                         extract($project);
+                        $currentTime = time();
+                        if($currentTime < $projectEndTime && $projectAmountRaised < $projectFundingGoal){
 
-                ?>
-                    <div class="col-lg-3 col-sm-6">
-                        <div class="card shadow-on-hover h-100">
-                            <img src="<?php echo "../../server/".$projectPhotoDir;  ?>" class="card-img-top" alt="..." width=500px height=400px>
-                            <div class="card-body">
-                                <h5 class="card-title"><?php echo $projectTitle; ?></h5>
-                                <p class="card-text"><?php echo $projectStory; ?></p>
-                                <a href="../user/viewProject.php?id=<?php echo $projectId; ?>" class="btn btn-primary">Read more..</a>
+                        ?>
+                            <div class="col-lg-3 col-sm-6">
+                                <div class="card shadow-on-hover h-100">
+                                    <img src="<?php echo "../../server/".$projectPhotoDir;  ?>" class="card-img-top" alt="..." width=500px height=400px>
+                                    <div class="card-body">
+                                        <h5 class="card-title"><?php echo $projectTitle; ?></h5>
+                                        <p class="card-text"><?php echo $projectStory; ?></p>
+                                        <a href="../user/viewProject.php?id=<?php echo $projectId; ?>" class="btn btn-primary">Read more..</a>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                    <?php
+                        <?php
                         }
+
+                    }
                     ?>
                 </div>
         </section>
 
-        <!--Comics Projects-->
+        <!--Ongoing Successful Projects-->
         <section class="mt-5 pt-5">
             <div class="container">
                 <div class="row align-items-center">
                     <div class="col-12 intro-text">
-                        <h1>Comics Projects</h1>
+                        <h1>Ongoing Successful Projects</h1>
                     </div>
                 </div>
 
@@ -181,23 +185,105 @@
                     foreach($projects as $projectOb){
                         $project = (array)$projectOb;
                         extract($project);
+                        $currentTime = time();
+                        if($currentTime < $projectEndTime && $projectAmountRaised >= $projectFundingGoal){
 
-                ?>
-                    <div class="col-lg-3 col-sm-6">
-                        <div class="card shadow-on-hover h-100">
-                            <img src="<?php echo "../../server/".$projectPhotoDir;  ?>" class="card-img-top" alt="..." width=500px height=400px>
-                            <div class="card-body">
-                                <h5 class="card-title"><?php echo $projectTitle; ?></h5>
-                                <p class="card-text"><?php echo $projectStory; ?></p>
-                                <a href="#" class="btn btn-primary">Read more..</a>
+                        ?>
+                            <div class="col-lg-3 col-sm-6">
+                                <div class="card shadow-on-hover h-100">
+                                    <img src="<?php echo "../../server/".$projectPhotoDir;  ?>" class="card-img-top" alt="..." width=500px height=400px>
+                                    <div class="card-body">
+                                        <h5 class="card-title"><?php echo $projectTitle; ?></h5>
+                                        <p class="card-text"><?php echo $projectStory; ?></p>
+                                        <a href="../user/viewProject.php?id=<?php echo $projectId; ?>" class="btn btn-primary">Read more..</a>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                    <?php
+                        <?php
                         }
+
+                    }
                     ?>
                 </div>
         </section>
+
+        <!--Successful Projects-->
+        <section class="mt-5 pt-5">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-12 intro-text">
+                        <h1>Successful Projects</h1>
+                    </div>
+                </div>
+
+                <div class="row gy-4 ms-auto">
+                    <?php
+
+                    $projects = $_SESSION["allProjects"];
+
+                    foreach($projects as $projectOb){
+                        $project = (array)$projectOb;
+                        extract($project);
+                        $currentTime = time();
+                        if($currentTime >= $projectEndTime && $projectAmountRaised >= $projectFundingGoal){
+
+                        ?>
+                            <div class="col-lg-3 col-sm-6">
+                                <div class="card shadow-on-hover h-100">
+                                    <img src="<?php echo "../../server/".$projectPhotoDir;  ?>" class="card-img-top" alt="..." width=500px height=400px>
+                                    <div class="card-body">
+                                        <h5 class="card-title"><?php echo $projectTitle; ?></h5>
+                                        <p class="card-text"><?php echo $projectStory; ?></p>
+                                        <a href="../user/viewProject.php?id=<?php echo $projectId; ?>" class="btn btn-primary">Read more..</a>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php
+                        }
+                    }
+                    ?>
+                </div>
+        </section>
+
+        <!--Failed Projects-->
+        <section class="mt-5 pt-5">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-12 intro-text">
+                        <h1>Failed Projects</h1>
+                    </div>
+                </div>
+
+                <div class="row gy-4 ms-auto">
+                    <?php
+
+                    $projects = $_SESSION["allProjects"];
+
+                    foreach($projects as $projectOb){
+                        $project = (array)$projectOb;
+                        extract($project);
+                        $currentTime = time();
+                        if($currentTime > $projectEndTime && $projectAmountRaised < $projectFundingGoal){
+
+                        ?>
+                            <div class="col-lg-3 col-sm-6">
+                                <div class="card shadow-on-hover h-100">
+                                    <img src="<?php echo "../../server/".$projectPhotoDir;  ?>" class="card-img-top" alt="..." width=500px height=400px>
+                                    <div class="card-body">
+                                        <h5 class="card-title"><?php echo $projectTitle; ?></h5>
+                                        <p class="card-text"><?php echo $projectStory; ?></p>
+                                        <a href="../user/viewProject.php?id=<?php echo $projectId; ?>" class="btn btn-primary">Read more..</a>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php
+                        }
+
+                    }
+                    ?>
+                </div>
+        </section>
+
     </main>
 
     <?php
