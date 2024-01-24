@@ -218,7 +218,7 @@ contract crowdfunding{
     // Funds the projects at given index
     function fundProject(uint256 _index) payable external validIndex(_index)  {
         require(projects[_index].creatorAddress != msg.sender, "You are the project owner");
-        require(projects[_index].endTime <= block.timestamp, "Project Funding Time Expired");
+        require(projects[_index].endTime > block.timestamp, "Project Funding Time Expired");
         addContribution(_index);
         projects[_index].amountRaised += msg.value;
     }
@@ -250,9 +250,11 @@ contract crowdfunding{
 
     // Enables the contributors to claim refund when refundable project doesn't reach its goal
     function claimRefund(uint256 _index) validIndex(_index) external {
+        console.log(projects[_index].endTime);
+        console.log(block.timestamp);
 
-        require(projects[_index].endTime  >= block.timestamp, "Project Funding Time Not Expired");
-        require(projects[_index].amountRaised < projects[_index].fundingGoal, "Funding goal not reached");
+        require(projects[_index].endTime  <= block.timestamp, "Project Funding Time Not Expired");
+        require(projects[_index].amountRaised < projects[_index].fundingGoal, "Funding goal already reached");
         
         int256 index = getContributorIndex(_index);
         require(index != -1, "You did not contribute to this project");

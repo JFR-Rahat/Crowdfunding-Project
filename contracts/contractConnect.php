@@ -1,7 +1,7 @@
 <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js" type="application/javascript"></script>
 
 <script>
-	let contractAddress = '0xB21233914977B845AffB5A735Ce5DaDBF0BA60a8';
+	let contractAddress = '0x1069a78cDcE994c39A8DA9E4aB85107C0E003D9d';
 	let contractABI = [
 	{
 		"inputs": [
@@ -435,6 +435,25 @@
 				"internalType": "struct crowdfunding.Funded[]",
 				"name": "fundedProjects",
 				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "contributor",
+				"type": "address"
+			}
+		],
+		"name": "getUserRefundClaimedLIst",
+		"outputs": [
+			{
+				"internalType": "uint256[]",
+				"name": "refundClaimedProjects",
+				"type": "uint256[]"
 			}
 		],
 		"stateMutability": "view",

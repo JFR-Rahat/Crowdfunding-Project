@@ -37,6 +37,11 @@ const getOwnerProject = async function() {
         console.log(fundedProjectsIndex);
 
         fundedProjects = await contract.getProjectsDetail(fundedProjectsIndex);
+        refundClaimedProjectIndexBigInt = await contract.getUserRefundClaimedLIst(signer._address);
+
+        refundClaimedProjectIndex = refundClaimedProjectIndexBigInt.map(function (item) {
+            return parseInt(item.toString());
+        });
 
         // fundedProjects.map(item=>console.log(item.projectName));
         var passFundedFailedProjects = new Array();
@@ -59,11 +64,10 @@ const getOwnerProject = async function() {
             projectList.projectMyFunding = fundedProjectsInfo[idx][1].toString();
 
             let currentTime = Math.floor(new Date().getTime() / 1000);
-            console.log(currentTime);
-            console.log(projectList.projectStartTime);
-            console.log(projectList.projectEndTime);
-
-            if(parseInt(projectList.projectAmountRaised) < parseInt(projectList.projectFundingGoal) && (currentTime > parseInt(projectList.projectEndTime))){
+            console.log(refundClaimedProjectIndex);
+            console.log(projectList.projectId);
+            console.log(refundClaimedProjectIndex.includes(parseInt(projectList.projectId)));
+            if(parseInt(projectList.projectAmountRaised) < parseInt(projectList.projectFundingGoal) && (currentTime > parseInt(projectList.projectEndTime) && (!refundClaimedProjectIndex.includes(parseInt(projectList.projectId))))){
                 passFundedFailedProjects.push(projectList);
             }
             else{

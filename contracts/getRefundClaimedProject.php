@@ -25,24 +25,19 @@ const getOwnerProject = async function() {
                 
             });
         });
-
+                
         // console.log(signer._address);
-        fundedProjectsInfo = await contract.getUserFundings(signer._address);
-        console.log("Projects Index: ", fundedProjectsInfo);
+        refundClaimedProjectIndex = await contract.getUserRefundClaimedLIst(signer._address);
+        console.log("Projects Index: ", refundClaimedProjectIndex);
 
-        fundedProjectsIndex = new Array();
-        fundedProjectsInfo.forEach(item => {
-            fundedProjectsIndex.push(item[0]);
-        });
-        console.log(fundedProjectsIndex);
 
-        fundedProjects = await contract.getProjectsDetail(fundedProjectsIndex);
+        refundClaimedProjects = await contract.getProjectsDetail(refundClaimedProjectIndex);
 
         // fundedProjects.map(item=>console.log(item.projectName));
-        var passFundedOngoingProjects = new Array();
-        let idx = 0;
-        console.log(fundedProjects);
-        fundedProjects.map((item)=>{
+        var passRefundClaimedProjects = new Array();
+        console.log(refundClaimedProjects);
+        refundClaimedProjects.map((item)=>{
+            console.log("hello");
             var projectList = {};
             projectList.projectTitle= item[0];
             projectList.projectStory = item[1];
@@ -56,39 +51,30 @@ const getOwnerProject = async function() {
             projectList.projectStartTime = item[9].toString();
             projectList.projectCategory = item[10];
             projectList.projectPhotoDir = item[11];
-            projectList.projectMyFunding = fundedProjectsInfo[idx][1].toString();
 
-            let currentTime = Math.floor(new Date().getTime() / 1000);
-            console.log(currentTime);
-            console.log(projectList.projectEndTime);
-            if(currentTime < parseInt(projectList.projectEndTime)){
-                passFundedOngoingProjects.push(projectList);
-            }
-            else{
-                // console.log("Failed");
-            }
+            console.log(projectList);
 
-            idx++;
+            passRefundClaimedProjects.push(projectList);
         });
 
-        // console.log("Projects: ", passFundedOngoingProjects);
-        if(passFundedOngoingProjects.length == 0){
+        // console.log("Projects: ", passRefundClaimedProjects);
+        if(passRefundClaimedProjects.length == 0){
 
-            passFundedOngoingProjects.push("Empty");
+            passRefundClaimedProjects.push("Empty");
         }
 
         $.ajax({
             type: "POST",
-            url: "setFundedOngoingProjects.php",
-            data: {'fundedOngoingProjects': JSON.stringify(passFundedOngoingProjects)},
+            url: "setRefundClaimedProjects.php",
+            data: {'refundClaimedProjects': JSON.stringify(passRefundClaimedProjects)},
             // data : {'fundedProjects': },
-            success: function(fundedOngoingProjects){
-                console.log("Succeed to send ownerProjects: ", passFundedOngoingProjects);
+            success: function(refundClaimedProjects){
+                console.log("Succeed to send ownerProjects: ", passRefundClaimedProjects);
             }
         });
 
-        window.location = "../client/user/fundedOngoingProject.php";
-        // console.log("P: ", passFundedOngoingProjects);
+        window.location = "../client/user/refundClaimedProject.php";
+        // console.log("P: ", passRefundClaimedProjects);
 
         
 		
