@@ -128,7 +128,7 @@
                     </div>
                 </div>
             </div>
-            <div class="container">
+            <div class="container mb-5 pt-3">
                     <?php echo $projectStory;?>
             </div>
         </section>

@@ -111,7 +111,7 @@
                                                 <td scope="col"><?php if($projectAmountRaised > 0) echo substr($projectAmountRaised, 0, strlen($projectAmountRaised)-15); else echo "0"; ?> Finney</td>
                                                 <td scope="col"><?php echo $projectTotalContributors; ?></td>
                                                 <td><button type="button" class="btn btn-outline-success" disabled
-                                                        onclick=claimRefund(<?php echo $projectId;?>)>Claim Refund</button></td>
+                                                        onclick=claimRefund(<?php echo $projectId;?>)>Claimed Refund</button></td>
                                                 <td><button type="button" class="btn btn-outline-info"
                                                         onclick=viewProject(<?php echo $projectId;?>)>View</button></td>
                                                 </tr>
