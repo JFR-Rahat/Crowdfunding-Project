@@ -109,20 +109,14 @@
                         <img src="../Photos/crowdfundingLogo.jpg" alt="Error">
                     </div>
                     <div class="col-lg-7">
-                        <h1>About Crowdfunding</h1>
+                        <h1>Create your project using our Site</h1>
                         <div class="divider my-3"></div>
-                        <p>Crowdfunding campaigns make ideas into reality. It’s where creators share new visions for
-                            creative work with the communities that will come together to fund them.
-
-                            Some of these creators, like Critical Role, TLC, and The Smithsonian Institution already had
-                            huge fanbases. But many projects have been as small-scale as a limited run of silent
-                            meditation vinyls or as up-and-coming as early versions of Issa Rae's Insecure and Phoebe
-                            Waller-Bridge’s Fleabag.
-
-                            No matter what, creators always control how the work comes together—no 100-page grant
-                            applications, no donors demanding you modify your message, no last-minute edits from
-                            investors. When backers chip in funding and help spread the word, they too become part of
-                            these independent works.</p>
+                        <div>
+                            <ul>
+                                <li>Login with your <a href="https://metamask.io/download/">Metamask</a> account.</li>
+                                <li>You can <a href="http://localhost/Crowdfunding%20Demo%20Project/client/pages/start_project.php">create</a> your project and raise funds for it.</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
