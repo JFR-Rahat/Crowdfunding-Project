@@ -48,6 +48,11 @@ contract crowdfunding{
 		uint256 totalAmount;
     }
 
+    struct Contributors{
+        address contributorAddress;
+        uint256 totalAmount;
+    }
+
     // Stores all the projects 
     Project[] projects;
 
@@ -194,6 +199,31 @@ contract crowdfunding{
     function getUserRefundClaimedLIst(address contributor) external view returns(uint256[] memory refundClaimedProjects) {
         return addressRefundClaimedList[contributor];
     }
+
+    function getProjectContributors(uint256 _index) external view validIndex(_index) returns (Contributors[] memory projectContributors) {
+        Contributors[] memory contributorInfo = new Contributors[](projects[_index].contributors.length);
+
+        uint256 count = 0; 
+
+        for (uint256 i = 0; i < projects[_index].contributors.length; i++) {
+            address contributor = projects[_index].contributors[i];
+
+            for (uint256 j = 0; j < addressFundingList[contributor].length; j++) {
+                if (addressFundingList[contributor][j].projectIndex == _index) {
+                    contributorInfo[count] = Contributors(contributor, addressFundingList[contributor][j].totalAmount);
+                    count++;
+                    break;
+                }
+            }
+        }
+
+        assembly {
+            mstore(contributorInfo, count)
+        }
+
+        return contributorInfo;
+    }
+
 
     // Helper function adds details of Funding to addressFundingList
     function addToFundingList(uint256 _index) internal validIndex(_index) {

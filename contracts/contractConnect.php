@@ -1,7 +1,7 @@
 <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js" type="application/javascript"></script>
 
 <script>
-	let contractAddress = '0x1069a78cDcE994c39A8DA9E4aB85107C0E003D9d';
+	let contractAddress = '0xEfd76eaCD56C712bf69604CF1B1921130fD8b064';
 	let contractABI = [
 	{
 		"inputs": [
@@ -318,6 +318,37 @@
 				"internalType": "struct crowdfunding.Project",
 				"name": "project",
 				"type": "tuple"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_index",
+				"type": "uint256"
+			}
+		],
+		"name": "getProjectContributors",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "address",
+						"name": "contributorAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "totalAmount",
+						"type": "uint256"
+					}
+				],
+				"internalType": "struct crowdfunding.Contributors[]",
+				"name": "projectContributors",
+				"type": "tuple[]"
 			}
 		],
 		"stateMutability": "view",

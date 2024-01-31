@@ -11,7 +11,7 @@
 
     if(isset($_GET['id'])){
         $projectId = $_GET['id'];
-        echo $projectId;
+        // echo $projectId;
     }
 
     include_once("contractConnect.php");

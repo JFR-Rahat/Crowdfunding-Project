@@ -59,6 +59,8 @@ contract crowdfunding{
     // Stores the list of fundings  by an address
     mapping(address => Funded[]) addressFundingList;
 
+    mapping(address => uint256[]) addressRefundClaimedList;
+
     // Checks if an index is a valid index in projects array
     modifier validIndex(uint256 _index) {
         require(_index < projects.length, "Invalid Project Id");
@@ -72,8 +74,8 @@ contract crowdfunding{
         string memory _creatorName,
         string memory _projectPhotoDir,
         uint256 _fundingGoal,
-        uint256 _creationTime,
         uint256 _endTime,
+        uint256 _creationTime,
         string memory _category
     ) external{
         projects.push(Project({
@@ -109,8 +111,8 @@ contract crowdfunding{
                 projects[i].fundingGoal,
                 projects[i].amountRaised,
                 projects[i].contributors.length,
-                projects[i].creationTime,
                 projects[i].endTime,
+                projects[i].creationTime,
                 projects[i].category,
                 projects[i].projectPhotoDir,
                 projects[i].claimedAmount
@@ -136,8 +138,8 @@ contract crowdfunding{
                     projects[i].fundingGoal,
                     projects[i].amountRaised,
                     projects[i].contributors.length,
-                    projects[i].creationTime,
                     projects[i].endTime,
+                    projects[i].creationTime,
                     projects[i].category,
                     projects[i].projectPhotoDir,
                     projects[i].claimedAmount
@@ -189,6 +191,10 @@ contract crowdfunding{
         return projects[_index].refundClaimed[contributorIndex];
     }
 
+    function getUserRefundClaimedLIst(address contributor) external view returns(uint256[] memory refundClaimedProjects) {
+        return addressRefundClaimedList[contributor];
+    }
+
     // Helper function adds details of Funding to addressFundingList
     function addToFundingList(uint256 _index) internal validIndex(_index) {
         for(uint256 i = 0; i < addressFundingList[msg.sender].length; i++) {
@@ -217,8 +223,11 @@ contract crowdfunding{
 
     // Funds the projects at given index
     function fundProject(uint256 _index) payable external validIndex(_index)  {
+        console.log(projects[_index].endTime);
+        console.log(block.timestamp);
+
         require(projects[_index].creatorAddress != msg.sender, "You are the project owner");
-        require(projects[_index].endTime > block.timestamp, "Project Funding Time Expired");
+        require(projects[_index].endTime > block.timestamp, "Project Funding Time Expired.");
         addContribution(_index);
         projects[_index].amountRaised += msg.value;
     }
@@ -267,8 +276,8 @@ contract crowdfunding{
         uint256 transferAmount = projects[_index].amount[contributorIndex];
         require(address(this).balance >= transferAmount, "Insufficient contract balance.");
 
-        
-
         payable(msg.sender).transfer(projects[_index].amount[contributorIndex]);
+
+        addressRefundClaimedList[msg.sender].push(_index);
     }
 }

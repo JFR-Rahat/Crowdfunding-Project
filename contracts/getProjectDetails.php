@@ -11,7 +11,7 @@
 
     if(isset($_GET['id'])){
         $projectId = $_GET['id'];
-        echo $projectId;
+        // echo $projectId;
     }
 
     include_once("contractConnect.php");
@@ -37,9 +37,29 @@ const getProjectDetails = async function() {
 
         project = await contract.getProjectsDetail(projectIndex);
 
-        // ownerProjects.map(item=>console.log(item.projectName));
-        var passProjectDetails = new Array();
+        contributorInfo = await contract.getProjectContributors(projectIndex[0]);
+        
+        let contributorInfoList = [];
 
+        contributorInfo.forEach(function (item) {
+            let address = item.contributorAddress;
+            let amount = item.totalAmount.toString();
+            console.log(address);
+            console.log(amount);
+            
+            let serializedItem = {
+                address: address,
+                amount: amount
+            };
+
+            contributorInfoList.push(serializedItem);
+        });
+
+        // console.log(contributorInfoList);
+
+        // console.log(contributorInfo);
+
+        var passProjectDetails = new Array();
 
         project.map((item)=>{
             var projectList = {};
@@ -55,6 +75,8 @@ const getProjectDetails = async function() {
             projectList.projectStartTime = item[9].toString();
             projectList.projectCategory = item[10];
             projectList.projectPhotoDir = item[11];
+            projectList.projectClaimedFund = item[12];
+            projectList.projectContributorsInfo = contributorInfoList;
 
             passProjectDetails.push(projectList);
             console.log(projectList);
@@ -66,7 +88,7 @@ const getProjectDetails = async function() {
             data: {'projectDetails': JSON.stringify(passProjectDetails)},
             // data : {'ownerProjects': },
             success: function(projectDetails){
-                console.log("Succeed to send projectDetails: ", passOwnerProjects);
+                console.log("Succeed to send projectDetails: ", projectDetails);
             }
         });
 

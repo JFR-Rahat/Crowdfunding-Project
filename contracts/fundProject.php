@@ -11,7 +11,12 @@
 
     if(isset($_GET['id'])){
         $projectId = $_GET['id'];
-        echo $projectId;
+        // echo $projectId;
+    }
+
+    if(isset($_GET['fundAmount'])){
+        $fundAmount = $_GET['fundAmount'];
+        // echo $fundAmount;
     }
 
     include_once("contractConnect.php");
@@ -70,8 +75,11 @@ const getProjectDetails = async function() {
             idx++;
         });
 
-
-        let amount = ethers.utils.parseEther("0.01");
+        let fundAmount = <?php echo strval($fundAmount / 1000); ?>;
+        console.log(fundAmount);
+        let fundAmountStr = fundAmount.toString();
+        let amount = ethers.utils.parseEther(fundAmountStr);
+        console.log(amount);
         project = await contract.fundProject(projectIndex[0], {value: amount});
         // console.log(ethers.utils.parseEther(amount));
         console.log(projectIndex[0]);
