@@ -172,8 +172,8 @@
                                     <td><?php echo $projectTitle;?></td>
                                     <td><?php echo $projectCategory;?></td>
                                     <td><?php echo $projectStory;?></td>
-                                    <td><?php echo $fundingGoal;?></td>
-                                    <td><?php echo $campaignDuration;?></td>
+                                    <td><?php echo $fundingGoal;?> Finney</td>
+                                    <td><?php echo $campaignDuration;?> minutes</td>
                                     <td><button type="button" class="btn btn-outline-info" onclick=viewProject(<?php echo $id;?>)>View</button></td>
                                     <td><button type="button" class="btn btn-outline-success" onclick=approveProject(<?php echo $id;?>)>Approve</button></td>
                                     <td><button type="button" class="btn btn-outline-danger" onclick=rejectProject(<?php echo $id;?>)>Reject</button></td>
