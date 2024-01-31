@@ -4,10 +4,18 @@ if(isset($_POST['launchProject'])){
     include_once("databaseConnect.php");
     extract($_POST);
 
+    $sql = "SELECT MAX(Id) AS LastInsertedId FROM projectlaunchrequest";
+    $result = mysqli_query($conn, $sql);
+
+    if($result){
+        $row = mysqli_fetch_array($result);
+        $lastId = $row['LastInsertedId'];
+    }
+
     $projectPhotoName = $_FILES["projectPhoto"]["name"];
     $projectPhotoTmp = $_FILES["projectPhoto"]["tmp_name"];
 
-    $projectPhotoDir = "projectPhotos/".$projectTitle.".jpg";
+    $projectPhotoDir = "projectPhotos/".($lastId+1)." - ".$projectTitle.".jpg";
 
     if(move_uploaded_file($projectPhotoTmp, $projectPhotoDir)){
         echo "";
