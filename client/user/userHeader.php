@@ -23,7 +23,7 @@
                         <?php
                             if($_SESSION["user"]){
                                 extract($_SESSION["user"]);
-                                echo substr($userAddress, 0, 5) . "......" . substr($userAddress, strlen($userAddress)-6, 5);
+                                echo substr($userAddress, 0, 5) . "......" . substr($userAddress, -6);
                             }
                             else{
                                 echo "Login";

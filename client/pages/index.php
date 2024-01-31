@@ -1,18 +1,26 @@
 <?php
 
-    session_start();
+session_start();
 
-    if(!isset($_SESSION["allProjects"])){
-        
-        header("location:../../contracts/getAllProjects.php");
-    }
+if (!isset($_SESSION["allProjects"])) {
 
-    if(!isset($_SESSION["user"]) and isset($_GET["userAddress"])){
+    header("location:../../contracts/getAllProjects.php");
+}
 
-        $_SESSION["user"] = array("userAddress"=>$_GET["userAddress"]);
-    }
+if (!isset($_SESSION["user"]) and isset($_GET["userAddress"])) {
 
-    // print_r($_SESSION["allProjects"]);
+    $_SESSION["user"] = array("userAddress" => $_GET["userAddress"]);
+}
+
+if(isset($_SESSION["user"])){
+    $user = $_SESSION['user'];
+    $allProjects = $_SESSION["allProjects"];
+    session_unset();
+    $_SESSION['user'] = $user;
+    $_SESSION["allProjects"] = $allProjects;
+}
+
+// print_r($_SESSION["allProjects"]);
 
 ?>
 
@@ -34,6 +42,7 @@
 </head>
 
 <body>
+
     <nav class="navbar navbar-expand-lg bg-body-tertiary shadow sticky-top">
         <div class="container-fluid">
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -58,34 +67,30 @@
                         </button>
                     </div>
                 </form>
-                <?php
-                    if(isset($_SESSION["user"])){
-                        // header("location: start_project.php");
-                        extract($_SESSION["user"]);
-                        // echo substr($userAddress, 0, 5) . "......" . substr($userAddress, strlen($userAddress)-6, 5);
 
-                        ?>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle btn btn-primary" href="#" role="button" data-bs-toggle="dropdown"
-                        aria-expanded="false">
-                        <?php echo substr($userAddress, 0, 5) . "......" . substr($userAddress, strlen($userAddress)-6, 5); ?>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="../user/userDashboard.php">User Dashboard</a></li>
-                        <li>
-                            <hr class="dropdown-divider" />
-                        </li>
-                        <li><a class="dropdown-item" href="userLogOut.php">Logout</a></li>
-                    </ul>
-                </li>
                 <?php
-
-                        // unset($_SESSION["user"]);
-                    }
-                    else{
-                        // echo "Login";
-                        ?>
-                <ul class="navbar-nav px-2">
+            if (isset($_SESSION["user"])) {
+                extract($_SESSION["user"]);
+                ?>
+                <ul class="navbar-nav ms-2 ">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle btn btn-primary" href="#" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <?php echo substr($userAddress, 0, 5) . "......" . substr($userAddress, -6); ?>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="../user/userDashboard.php">User Dashboard</a></li>
+                            <li>
+                                <hr class="dropdown-divider" />
+                            </li>
+                            <li><a class="dropdown-item" href="userLogOut.php">Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <?php
+            } else {
+            ?>
+                <ul class="navbar-nav ms-2">
                     <li class="nav-item">
                         <button type="button" class="btn btn-primary" id="connectWalletBtn" data-bs-toggle="modal"
                             data-bs-target="#exampleModalCenter">Login
@@ -93,8 +98,8 @@
                     </li>
                 </ul>
                 <?php
-                    }
-                ?>
+            }
+            ?>
             </div>
         </div>
     </nav>
@@ -113,14 +118,23 @@
                         <div class="divider my-3"></div>
                         <div>
                             <ul>
-                                <li>Login with your <a href="https://metamask.io/download/">Metamask</a> account.</li>
-                                <li>You can <a href="http://localhost/Crowdfunding%20Demo%20Project/client/pages/start_project.php">create</a> your project and raise funds for it.</li>
+                                <li class="fs-3">Login with your <a href="https://metamask.io/download/">Metamask</a>
+                                    account.</li>
+                                <li class="fs-3">You can <a
+                                        href="start_project.php">create</a>
+                                    your project and raise funds for it.</li>
+                                <li class="fs-3">You can claim the fundings if the project reaches the target goal
+                                    before deadline.</li>
                             </ul>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
+
+        <div class="container alert alert-info m-5">
+            The site owner will receive 5% of the funding amount when the project creator claims the funding.
+        </div>
 
 
         <!--Ongoing Projects-->
@@ -134,32 +148,38 @@
 
                 <div class="row gy-4 ms-auto">
                     <?php
-
                     $projects = $_SESSION["allProjects"];
 
-                    foreach($projects as $projectOb){
-                        $project = (array)$projectOb;
+                    foreach ($projects as $projectOb) {
+                        $project = (array) $projectOb;
                         extract($project);
                         $currentTime = time();
-                        if($currentTime < $projectEndTime && $projectAmountRaised < $projectFundingGoal){
-
-                        ?>
-                            <div class="col-lg-3 col-sm-6">
-                                <div class="card shadow-on-hover h-100">
-                                    <img src="<?php echo "../../server/".$projectPhotoDir;  ?>" class="card-img-top" alt="..." width=500px height=400px>
-                                    <div class="card-body">
-                                        <h5 class="card-title"><?php echo $projectTitle; ?></h5>
-                                        <p class="card-text"><?php echo $projectStory; ?></p>
-                                        <a href="../user/viewProject.php?id=<?php echo $projectId; ?>" class="btn btn-primary">Read more..</a>
-                                    </div>
-                                </div>
+                        if ($currentTime < $projectEndTime && $projectAmountRaised < $projectFundingGoal) {
+                            ?>
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="card shadow-on-hover h-100">
+                            <img src="<?php echo "../../server/" . $projectPhotoDir; ?>" class="card-img-top" alt="..."
+                                width=500px height=400px>
+                            <div class="card-body" style="max-height: 150px; overflow: hidden;">
+                                <h5 class="card-title">
+                                    <?php echo $projectTitle; ?>
+                                </h5>
+                                <p class="card-text">
+                                    <?php echo $projectStory; ?>
+                                </p>
                             </div>
-                        <?php
+                            <div class="m-2">
+                                <a href="../user/viewProject.php?id=<?php echo $projectId; ?>"
+                                    class="btn btn-primary">Read more..</a>
+                            </div>
+                        </div>
+                    </div>
+                    <?php
                         }
-
                     }
                     ?>
                 </div>
+            </div>
         </section>
 
         <!--Ongoing Successful Projects-->
@@ -173,32 +193,38 @@
 
                 <div class="row gy-4 ms-auto">
                     <?php
-
                     $projects = $_SESSION["allProjects"];
 
-                    foreach($projects as $projectOb){
-                        $project = (array)$projectOb;
+                    foreach ($projects as $projectOb) {
+                        $project = (array) $projectOb;
                         extract($project);
                         $currentTime = time();
-                        if($currentTime < $projectEndTime && $projectAmountRaised >= $projectFundingGoal){
-
-                        ?>
-                            <div class="col-lg-3 col-sm-6">
-                                <div class="card shadow-on-hover h-100">
-                                    <img src="<?php echo "../../server/".$projectPhotoDir;  ?>" class="card-img-top" alt="..." width=500px height=400px>
-                                    <div class="card-body">
-                                        <h5 class="card-title"><?php echo $projectTitle; ?></h5>
-                                        <p class="card-text"><?php echo $projectStory; ?></p>
-                                        <a href="../user/viewProject.php?id=<?php echo $projectId; ?>" class="btn btn-primary">Read more..</a>
-                                    </div>
-                                </div>
+                        if ($currentTime < $projectEndTime && $projectAmountRaised >= $projectFundingGoal) {
+                            ?>
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="card shadow-on-hover h-100">
+                            <img src="<?php echo "../../server/" . $projectPhotoDir; ?>" class="card-img-top" alt="..."
+                                width=500px height=400px>
+                            <div class="card-body" style="max-height: 150px; overflow: hidden;">
+                                <h5 class="card-title">
+                                    <?php echo $projectTitle; ?>
+                                </h5>
+                                <p class="card-text">
+                                    <?php echo $projectStory; ?>
+                                </p>
                             </div>
-                        <?php
+                            <div class="m-2">
+                                <a href="../user/viewProject.php?id=<?php echo $projectId; ?>"
+                                    class="btn btn-primary">Read more..</a>
+                            </div>
+                        </div>
+                    </div>
+                    <?php
                         }
-
                     }
                     ?>
                 </div>
+            </div>
         </section>
 
         <!--Successful Projects-->
@@ -212,31 +238,38 @@
 
                 <div class="row gy-4 ms-auto">
                     <?php
-
                     $projects = $_SESSION["allProjects"];
 
-                    foreach($projects as $projectOb){
-                        $project = (array)$projectOb;
+                    foreach ($projects as $projectOb) {
+                        $project = (array) $projectOb;
                         extract($project);
                         $currentTime = time();
-                        if($currentTime >= $projectEndTime && $projectAmountRaised >= $projectFundingGoal){
-
-                        ?>
-                            <div class="col-lg-3 col-sm-6">
-                                <div class="card shadow-on-hover h-100">
-                                    <img src="<?php echo "../../server/".$projectPhotoDir;  ?>" class="card-img-top" alt="..." width=500px height=400px>
-                                    <div class="card-body">
-                                        <h5 class="card-title"><?php echo $projectTitle; ?></h5>
-                                        <p class="card-text"><?php echo $projectStory; ?></p>
-                                        <a href="../user/viewProject.php?id=<?php echo $projectId; ?>" class="btn btn-primary">Read more..</a>
-                                    </div>
-                                </div>
+                        if ($currentTime >= $projectEndTime && $projectAmountRaised >= $projectFundingGoal) {
+                            ?>
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="card shadow-on-hover h-100">
+                            <img src="<?php echo "../../server/" . $projectPhotoDir; ?>" class="card-img-top" alt="..."
+                                width=500px height=400px>
+                            <div class="card-body" style="max-height: 150px; overflow: hidden;">
+                                <h5 class="card-title">
+                                    <?php echo $projectTitle; ?>
+                                </h5>
+                                <p class="card-text">
+                                    <?php echo $projectStory; ?>
+                                </p>
                             </div>
-                        <?php
+                            <div class="m-2">
+                                <a href="../user/viewProject.php?id=<?php echo $projectId; ?>"
+                                    class="btn btn-primary">Read more..</a>
+                            </div>
+                        </div>
+                    </div>
+                    <?php
                         }
                     }
                     ?>
                 </div>
+            </div>
         </section>
 
         <!--Failed Projects-->
@@ -250,40 +283,46 @@
 
                 <div class="row gy-4 ms-auto">
                     <?php
-
                     $projects = $_SESSION["allProjects"];
 
-                    foreach($projects as $projectOb){
-                        $project = (array)$projectOb;
+                    foreach ($projects as $projectOb) {
+                        $project = (array) $projectOb;
                         extract($project);
                         $currentTime = time();
-                        if($currentTime > $projectEndTime && $projectAmountRaised < $projectFundingGoal){
-
-                        ?>
-                            <div class="col-lg-3 col-sm-6">
-                                <div class="card shadow-on-hover h-100">
-                                    <img src="<?php echo "../../server/".$projectPhotoDir;  ?>" class="card-img-top" alt="..." width=500px height=400px>
-                                    <div class="card-body">
-                                        <h5 class="card-title"><?php echo $projectTitle; ?></h5>
-                                        <p class="card-text"><?php echo $projectStory; ?></p>
-                                        <a href="../user/viewProject.php?id=<?php echo $projectId; ?>" class="btn btn-primary">Read more..</a>
-                                    </div>
-                                </div>
+                        if ($currentTime > $projectEndTime && $projectAmountRaised < $projectFundingGoal) {
+                            ?>
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="card shadow-on-hover h-100">
+                            <img src="<?php echo "../../server/" . $projectPhotoDir; ?>" class="card-img-top" alt="..."
+                                width=500px height=400px>
+                            <div class="card-body" style="max-height: 150px; overflow: hidden;">
+                                <h5 class="card-title">
+                                    <?php echo $projectTitle; ?>
+                                </h5>
+                                <p class="card-text">
+                                    <?php echo $projectStory; ?>
+                                </p>
                             </div>
-                        <?php
+                            <div class="m-2">
+                                <a href="../user/viewProject.php?id=<?php echo $projectId; ?>"
+                                    class="btn btn-primary">Read more..</a>
+                            </div>
+                        </div>
+                    </div>
+                    <?php
                         }
-
                     }
                     ?>
                 </div>
+            </div>
         </section>
 
     </main>
 
     <?php
 
-        unset($_SESSION["allProjects"]);
-    
+    unset($_SESSION["allProjects"]);
+
     ?>
 
     <!-- Modal -->

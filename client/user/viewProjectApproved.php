@@ -66,34 +66,30 @@
                         </button>
                     </div>
                 </form>
-                <?php
-                    if(isset($_SESSION["user"])){
-                        // header("location: start_project.php");
-                        extract($_SESSION["user"]);
-                        // echo substr($userAddress, 0, 5) . "......" . substr($userAddress, strlen($userAddress)-6, 5);
 
-                        ?>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle btn btn-primary" href="#" role="button" data-bs-toggle="dropdown"
-                        aria-expanded="false">
-                        <?php echo substr($userAddress, 0, 5) . "......" . substr($userAddress, strlen($userAddress)-6, 5); ?>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="../user/userDashboard.php">User Dashboard</a></li>
-                        <li>
-                            <hr class="dropdown-divider" />
-                        </li>
-                        <li><a class="dropdown-item" href="userLogOut.php">Logout</a></li>
-                    </ul>
-                </li>
                 <?php
-
-                        // unset($_SESSION["user"]);
-                    }
-                    else{
-                        // echo "Login";
-                        ?>
-                <ul class="navbar-nav px-2">
+            if (isset($_SESSION["user"])) {
+                extract($_SESSION["user"]);
+                ?>
+                <ul class="navbar-nav ms-2 ">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle btn btn-primary" href="#" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <?php echo substr($userAddress, 0, 5) . "......" . substr($userAddress, -6); ?>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="../user/userDashboard.php">User Dashboard</a></li>
+                            <li>
+                                <hr class="dropdown-divider" />
+                            </li>
+                            <li><a class="dropdown-item" href="../pages/userLogOut.php">Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <?php
+            } else {
+            ?>
+                <ul class="navbar-nav ms-2">
                     <li class="nav-item">
                         <button type="button" class="btn btn-primary" id="connectWalletBtn" data-bs-toggle="modal"
                             data-bs-target="#exampleModalCenter">Login
@@ -101,8 +97,8 @@
                     </li>
                 </ul>
                 <?php
-                    }
-                ?>
+            }
+            ?>
             </div>
         </div>
     </nav>
@@ -114,7 +110,7 @@
             <div class="container">
                 <div class="row gx-5 align-item-center">
                     <div class="col-lg-7">
-                        <img src= "<?php echo "../../server/".$projectPhotoDir; ?>" alt="Error" style="height:40vh">
+                        <img src="<?php echo "../../server/".$projectPhotoDir; ?>" alt="Error" style="height:40vh">
                     </div>
                     <div class="col-lg-5">
                         <h1><?php echo $projectTitle; ?></h1>
@@ -129,108 +125,114 @@
                 </div>
             </div>
             <div class="container mb-5 pt-3">
-                    <?php echo $projectStory;?>
+                <?php echo $projectStory;?>
             </div>
         </section>
 
-    <!-- Modal -->
-    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
-        aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title mx-auto" id="exampleModalLongTitle">Crowdfunding</h5>
-                </div>
-                <div class="modal-body">
-                    <div class="d-grid gap-2">
-                        <button type="button" class="btn btn-primary" id="connectWalletCnfBtn">Connect Wallet</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+            aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title mx-auto" id="exampleModalLongTitle">Crowdfunding</h5>
+                    </div>
+                    <div class="modal-body">
+                        <div class="d-grid gap-2">
+                            <button type="button" class="btn btn-primary" id="connectWalletCnfBtn">Connect
+                                Wallet</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Fund Modal -->
-    <div class="modal fade" id="fundModal" tabindex="-1" role="dialog"
-        aria-labelledby="fundModalTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title mx-auto" id="fundModalLongTitle">Are you sure you want to fund this project?</h5>
-                </div>
-                <div class="modal-body">
-                    <div class="d-grid gap-2">
-                        <button type="button" class="btn btn-primary" id="fundConfirmBtn" onclick="fundProject()">Fund this project</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <!-- Fund Modal -->
+        <div class="modal fade" id="fundModal" tabindex="-1" role="dialog" aria-labelledby="fundModalTitle"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title mx-auto" id="fundModalLongTitle">Are you sure you want to fund this
+                            project?</h5>
+                    </div>
+                    <div class="modal-body">
+                        <div class="d-grid gap-2">
+                            <button type="button" class="btn btn-primary" id="fundConfirmBtn"
+                                onclick="fundProject()">Fund this project</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Claim Modal -->
-    <div class="modal fade" id="claimModal" tabindex="-1" role="dialog"
-        aria-labelledby="claimModalTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title mx-auto" id="claimModalLongTitle">Are you sure you want to claim fund?</h5>
-                </div>
-                <div class="modal-body">
-                    <div class="d-grid gap-2">
-                        <button type="button" class="btn btn-primary" id="claimConfirmBtn" onclick="claimFund()">Claim Fund/button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <!-- Claim Modal -->
+        <div class="modal fade" id="claimModal" tabindex="-1" role="dialog" aria-labelledby="claimModalTitle"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title mx-auto" id="claimModalLongTitle">Are you sure you want to claim fund?
+                        </h5>
+                    </div>
+                    <div class="modal-body">
+                        <div class="d-grid gap-2">
+                            <button type="button" class="btn btn-primary" id="claimConfirmBtn"
+                                onclick="claimFund()">Claim Fund/button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!--Footer-->
-    <footer>
-        <div class="footer-top">
-            <div class="container">
-                <hr>
-                <h5 class="text-center pt-3">CONTACT US</h5>
-                <div class="row">
-                    <div class="col-lg-1">
-                        <img src="../../client/Photos/crowdfundingLogo.jpg" alt="" style="height: 100px; width: 100px;">
+        <!--Footer-->
+        <footer>
+            <div class="footer-top">
+                <div class="container">
+                    <hr>
+                    <h5 class="text-center pt-3">CONTACT US</h5>
+                    <div class="row">
+                        <div class="col-lg-1">
+                            <img src="../../client/Photos/crowdfundingLogo.jpg" alt=""
+                                style="height: 100px; width: 100px;">
+                        </div>
+                        <div class="col-lg-7 pt-4">
+                            <h6>Crowdfunding</h6>
+                            <h6>A Secure Solution to Project Funding</h6>
+                        </div>
+                        <div class="col-lg-4">
+                            <h6 class="mb-2">PABX Telephone: 09032-56212, 56214, 56217, 56245, 56247, 56248, 56271</h6>
+                            <h6>Fax : 09032-56270</h6>
+                        </div>
                     </div>
-                    <div class="col-lg-7 pt-4">
-                        <h6>Crowdfunding</h6>
-                        <h6>A Secure Solution to Project Funding</h6>
+                    <div class="row">
+                        <div class="col">
+                            <p class="text-lead text-center">
+                                © Copyright 2023, Crowdfunding. All rights reserved
+                            </p>
+                        </div>
+                        <!-- <div class="col-lg-4"></div> -->
                     </div>
-                    <div class="col-lg-4">
-                        <h6 class="mb-2">PABX Telephone: 09032-56212, 56214, 56217, 56245, 56247, 56248, 56271</h6>
-                        <h6>Fax : 09032-56270</h6>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col">
-                        <p class="text-lead text-center">
-                            © Copyright 2023, Crowdfunding. All rights reserved
-                        </p>
-                    </div>
-                    <!-- <div class="col-lg-4"></div> -->
                 </div>
             </div>
-        </div>
-    </footer>
+        </footer>
 
-    <script>
-        function fundProject(){
+        <script>
+        function fundProject() {
             window.location = "../../contracts/fundProject.php?id=<?php echo $projectId; ?>";
         }
-    </script>
+        </script>
 
 
-    <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js" type="application/javascript"></script>
-    <!-- <script src="../js/index.js"></script> -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous">
-    </script>
-    <script src="../js/home.js"></script>
+        <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js" type="application/javascript"></script>
+        <!-- <script src="../js/index.js"></script> -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous">
+        </script>
+        <script src="../js/home.js"></script>
 
 </body>
 

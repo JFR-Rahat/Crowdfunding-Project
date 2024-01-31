@@ -14,15 +14,16 @@
 
     if(!isset($_SESSION['projectDetails'])){
         ?>
-        <script>
-            window.location = "../../contracts/getProjectDetails.php?id="+<?php echo $projectId;?>;
-        </script>
-        <?php
+<script>
+window.location = "../../contracts/getProjectDetails.php?id=" + <?php echo $projectId;?>;
+</script>
+<?php
     }
 
     $project = (array)$_SESSION["projectDetails"][0];
     extract($project);
 
+    date_default_timezone_set('Asia/Dhaka');
 
 ?>
 
@@ -68,34 +69,30 @@
                         </button>
                     </div>
                 </form>
-                <?php
-                    if(isset($_SESSION["user"])){
-                        // header("location: start_project.php");
-                        extract($_SESSION["user"]);
-                        // echo substr($userAddress, 0, 5) . "......" . substr($userAddress, strlen($userAddress)-6, 5);
 
-                        ?>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle btn btn-primary" href="#" role="button" data-bs-toggle="dropdown"
-                        aria-expanded="false">
-                        <?php echo substr($userAddress, 0, 5) . "......" . substr($userAddress, strlen($userAddress)-6, 5); ?>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="../user/userDashboard.php">User Dashboard</a></li>
-                        <li>
-                            <hr class="dropdown-divider" />
-                        </li>
-                        <li><a class="dropdown-item" href="userLogOut.php">Logout</a></li>
-                    </ul>
-                </li>
                 <?php
-
-                        // unset($_SESSION["user"]);
-                    }
-                    else{
-                        // echo "Login";
-                        ?>
-                <ul class="navbar-nav px-2">
+            if (isset($_SESSION["user"])) {
+                extract($_SESSION["user"]);
+                ?>
+                <ul class="navbar-nav ms-2 ">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle btn btn-primary" href="#" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <?php echo substr($userAddress, 0, 5) . "......" . substr($userAddress, -6); ?>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="../user/userDashboard.php">User Dashboard</a></li>
+                            <li>
+                                <hr class="dropdown-divider" />
+                            </li>
+                            <li><a class="dropdown-item" href="../pages/userLogOut.php">Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <?php
+            } else {
+            ?>
+                <ul class="navbar-nav ms-2">
                     <li class="nav-item">
                         <button type="button" class="btn btn-primary" id="connectWalletBtn" data-bs-toggle="modal"
                             data-bs-target="#exampleModalCenter">Login
@@ -103,8 +100,8 @@
                     </li>
                 </ul>
                 <?php
-                    }
-                ?>
+            }
+            ?>
             </div>
         </div>
     </nav>
@@ -116,145 +113,195 @@
             <div class="container">
                 <div class="row gx-5 align-item-center">
                     <div class="col-lg-7">
-                        <img src= "<?php echo "../../server/".$projectPhotoDir; ?>" alt="Error">
+                        <img src="<?php echo "../../server/".$projectPhotoDir; ?>" alt="Error">
                     </div>
                     <div class="col-lg-5">
                         <h1><?php echo $projectTitle; ?></h1>
                         <div class="divider my-3"></div>
-                        <div>Raised Fund: <?php if($projectAmountRaised > 0) echo substr($projectAmountRaised, 0, strlen($projectAmountRaised)-15); else echo "0";?> Finney</div>
-                        <div>Goal Fund: <?php echo substr($projectFundingGoal, 0, strlen($projectFundingGoal)-15); ?> Finney</div>
+                        <div>Raised Fund:
+                            <?php if($projectAmountRaised > 0) echo substr($projectAmountRaised, 0, strlen($projectAmountRaised)-15); else echo "0";?>
+                            Finney</div>
+                        <div>Goal Fund: <?php echo substr($projectFundingGoal, 0, strlen($projectFundingGoal)-15); ?>
+                            Finney</div>
                         <div>Number of Funders: <?php echo $projectTotalContributors; ?></div>
                         <div>Start Time: <?php echo date("Y-m-d H:i:s", substr($projectStartTime, 0, 10)); ?></div>
                         <div>End Time: <?php echo date("Y-m-d H:i:s", substr($projectEndTime, 0, 10)); ?></div>
                         <div>Project Owner: <?php echo $projectOwnerName; ?></div>
                         <div>Owner Wallet: <?php echo $projectOwnerAddress; ?></div>
-                        <div class="mt-2 pt-2"><button class="btn btn-success fundButton" data-bs-toggle="modal" data-bs-target="#fundModal"
-                        <?php 
-                            if($projectOwnerAddress == $_SESSION["user"]["userAddress"] || time() >= $projectEndTime){
-                                // echo "disabled";
-                            }
-                            else{
-                                // echo "hidden";
-                            }
-                         ?>
-                        >Fund this project.</button></div>
-                        <div class="mt-2 pt-2"><button class="btn btn-success fundButton" data-bs-toggle="modal" data-bs-target="#claimModal" 
-                        <?php 
+                        <?php if(isset($_SESSION["user"])){
+                            ?>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-outline">
+                                    <label class="form-label" for="typeNumber">Fund Amount:</label>
+                                    <div class="input-group">
+                                        <input type="number" id="typeNumber" class="form-control" value="1" min="1" />
+                                        <span class="input-group-text">Finney</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <?php }?>
+                        <?php if(isset($_SESSION["user"])){
+                            ?>
+                        <div class="mt-2 pt-2"><button class="btn btn-success fundButton" data-bs-toggle="modal"
+                                data-bs-target="#fundModal" <?php 
                             if($projectOwnerAddress == $_SESSION["user"]["userAddress"]){
-                                echo "disabled";
-                            }
-                            else{
                                 echo "hidden";
                             }
-                         ?>
-                         >Claim Fund.</button></div>
+                            else if(time() >= (int)$projectEndTime){
+                                echo "disabled";
+                            }
+                         ?>>Fund this project.</button></div><?php }?>
+                        <?php if(isset($_SESSION["user"])){
+                            ?>
+                        <div class="mt-2 pt-2"><button class="btn btn-success fundButton" data-bs-toggle="modal"
+                                data-bs-target="#claimModal" <?php 
+                            if($projectOwnerAddress != $_SESSION["user"]["userAddress"]){
+                                echo "hidden";
+                            }
+                            else if($projectAmountRaised < $projectFundingGoal || time() < (int)$projectEndTime || $projectClaimedFund){
+                                echo "disabled";
+                            }
+                         ?> >Claim Fund</button></div><?php }?>
 
                     </div>
                 </div>
             </div>
             <div class="container mb-5 pt-3">
-                    <?php echo $projectStory;?>
+                <?php echo $projectStory;?>
+            </div>
+            <div class="container mb-5 pt-3">
+                <div class="h2 mb-4">Funders List</div>
+                <?php foreach ($projectContributorsInfo as $contributor) { ?>
+                <div class="card mt-2">
+                    <div class="card-body">
+                        <h5 class="card-title">Funder Details</h5>
+                        <p class="card-text">
+                            Address: <?php echo $contributor->address; ?><br>
+                            Amount: <?php echo substr($contributor->amount, 0, strlen($contributor->amount)-15); ?>
+                            Finney
+                        </p>
+                    </div>
+                </div>
+                <?php } ?>
             </div>
         </section>
 
-    <!-- Modal -->
-    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
-        aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title mx-auto" id="exampleModalLongTitle">Crowdfunding</h5>
-                </div>
-                <div class="modal-body">
-                    <div class="d-grid gap-2">
-                        <button type="button" class="btn btn-primary" id="connectWalletCnfBtn">Connect Wallet</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+            aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title mx-auto" id="exampleModalLongTitle">Crowdfunding</h5>
+                    </div>
+                    <div class="modal-body">
+                        <div class="d-grid gap-2">
+                            <button type="button" class="btn btn-primary" id="connectWalletCnfBtn">Connect
+                                Wallet</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Fund Modal -->
-    <div class="modal fade" id="fundModal" tabindex="-1" role="dialog"
-        aria-labelledby="fundModalTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title mx-auto" id="fundModalLongTitle">Are you sure you want to fund this project?</h5>
-                </div>
-                <div class="modal-body">
-                    <div class="d-grid gap-2">
-                        <button type="button" class="btn btn-primary" id="fundConfirmBtn" onclick="fundProject()">Fund this project</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <!-- Fund Modal -->
+        <div class="modal fade" id="fundModal" tabindex="-1" role="dialog" aria-labelledby="fundModalTitle"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title mx-auto" id="fundModalLongTitle">Are you sure you want to fund this
+                            project?</h5>
+                    </div>
+                    <div class="modal-body">
+                        <div class="d-grid gap-2">
+                            <button type="button" class="btn btn-primary" id="fundConfirmBtn"
+                                onclick="fundProject()">Fund this project</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Claim Modal -->
-    <div class="modal fade" id="claimModal" tabindex="-1" role="dialog"
-        aria-labelledby="claimModalTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title mx-auto" id="claimModalLongTitle">Are you sure you want to claim fund?</h5>
-                </div>
-                <div class="modal-body">
-                    <div class="d-grid gap-2">
-                        <button type="button" class="btn btn-primary" id="claimConfirmBtn" onclick="claimFund()">Claim Fund/button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <!-- Claim Modal -->
+        <div class="modal fade" id="claimModal" tabindex="-1" role="dialog" aria-labelledby="claimModalTitle"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title mx-auto" id="claimModalLongTitle">Are you sure you want to claim fund?
+                        </h5>
+                    </div>
+                    <div class="modal-body">
+                        <div class="d-grid gap-2">
+                            <button type="button" class="btn btn-primary" id="claimConfirmBtn"
+                                onclick="claimFund(<?php echo $projectId; ?>)">Claim Fund</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!--Footer-->
-    <footer>
-        <div class="footer-top">
-            <div class="container">
-                <hr>
-                <h5 class="text-center pt-3">CONTACT US</h5>
-                <div class="row">
-                    <div class="col-lg-1">
-                        <img src="../Photos/crowdfundingLogo.jpg" alt="" style="height: 100px; width: 100px;">
+        <!--Footer-->
+        <footer>
+            <div class="footer-top">
+                <div class="container">
+                    <hr>
+                    <h5 class="text-center pt-3">CONTACT US</h5>
+                    <div class="row">
+                        <div class="col-lg-1">
+                            <img src="../Photos/crowdfundingLogo.jpg" alt="" style="height: 100px; width: 100px;">
+                        </div>
+                        <div class="col-lg-7 pt-4">
+                            <h6>Crowdfunding</h6>
+                            <h6>A Secure Solution to Project Funding</h6>
+                        </div>
+                        <div class="col-lg-4">
+                            <h6 class="mb-2">PABX Telephone: 09032-56212, 56214, 56217, 56245, 56247, 56248, 56271</h6>
+                            <h6>Fax : 09032-56270</h6>
+                        </div>
                     </div>
-                    <div class="col-lg-7 pt-4">
-                        <h6>Crowdfunding</h6>
-                        <h6>A Secure Solution to Project Funding</h6>
+                    <div class="row">
+                        <div class="col">
+                            <p class="text-lead text-center">
+                                © Copyright 2023, Crowdfunding. All rights reserved
+                            </p>
+                        </div>
+                        <!-- <div class="col-lg-4"></div> -->
                     </div>
-                    <div class="col-lg-4">
-                        <h6 class="mb-2">PABX Telephone: 09032-56212, 56214, 56217, 56245, 56247, 56248, 56271</h6>
-                        <h6>Fax : 09032-56270</h6>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col">
-                        <p class="text-lead text-center">
-                            © Copyright 2023, Crowdfunding. All rights reserved
-                        </p>
-                    </div>
-                    <!-- <div class="col-lg-4"></div> -->
                 </div>
             </div>
-        </div>
-    </footer>
+        </footer>
 
-    <script>
-        function fundProject(){
-            window.location = "../../contracts/fundProject.php?id=<?php echo $projectId; ?>";
-        }
-    </script>
+        <script>
+            function fundProject() {
+                let fundAmount = document.getElementById('typeNumber').value;
+                console.log(fundAmount);
+                if (fundAmount <= 0) {
+                    alert("Fund amount must be greater than 0.");
+                } else {
+                    window.location = "../../contracts/fundProject.php?id=<?php echo $projectId; ?>&fundAmount=" +
+                        encodeURIComponent(fundAmount);
+                }
+            }
+            function claimFund(id) {
+                window.location = "../../contracts/claimFund.php?id=" + id;
+            }
+        </script>
 
 
-    <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js" type="application/javascript"></script>
-    <!-- <script src="../js/index.js"></script> -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous">
-    </script>
-    <script src="../js/home.js"></script>
+        <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js" type="application/javascript"></script>
+        <!-- <script src="../js/index.js"></script> -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous">
+        </script>
+        <script src="../js/home.js"></script>
 
 </body>
 

@@ -30,7 +30,7 @@ if(isset($_GET["userAddress"])){
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary shadow sticky-top" id="navbar">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary shadow sticky-top">
         <div class="container-fluid">
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
@@ -43,7 +43,7 @@ if(isset($_GET["userAddress"])){
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="">Start A Project</a>
+                        <a class="nav-link" aria-current="page" href="start_project.php">Start A Project</a>
                     </li>
                 </ul>
                 <form class="d-flex ms-auto my-3 my-lg-0">
@@ -54,35 +54,30 @@ if(isset($_GET["userAddress"])){
                         </button>
                     </div>
                 </form>
-                <?php
-                    if(isset($_SESSION["user"])){
-                        // header("location: start_project.php");
-                        extract($_SESSION["user"]);
-                        // echo substr($userAddress, 0, 5) . "......" . substr($userAddress, strlen($userAddress)-6, 5);
-
-                        ?>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle btn btn-primary" href="#" role="button" data-bs-toggle="dropdown"
-                        aria-expanded="false">
-                        <?php echo substr($userAddress, 0, 5) . "......" . substr($userAddress, strlen($userAddress)-6, 5); ?>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="../user/userDashboard.php">User Dashboard</a></li>
-                        <li>
-                            <hr class="dropdown-divider" />
-                        </li>
-                        <li><a class="dropdown-item" href="userLogOut.php">Logout</a></li>
-                    </ul>
-                </li>
 
                 <?php
-
-                        // unset($_SESSION["user"]);
-                    }
-                    else{
-                        // echo "Login";
-                        ?>
-                <ul class="navbar-nav px-2">
+            if (isset($_SESSION["user"])) {
+                extract($_SESSION["user"]);
+                ?>
+                <ul class="navbar-nav ms-2 ">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle btn btn-primary" href="#" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <?php echo substr($userAddress, 0, 5) . "......" . substr($userAddress, -6); ?>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="../user/userDashboard.php">User Dashboard</a></li>
+                            <li>
+                                <hr class="dropdown-divider" />
+                            </li>
+                            <li><a class="dropdown-item" href="userLogOut.php">Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <?php
+            } else {
+            ?>
+                <ul class="navbar-nav ms-2">
                     <li class="nav-item">
                         <button type="button" class="btn btn-primary" id="connectWalletBtn" data-bs-toggle="modal"
                             data-bs-target="#exampleModalCenter">Login
@@ -90,8 +85,8 @@ if(isset($_GET["userAddress"])){
                     </li>
                 </ul>
                 <?php
-                    }
-                ?>
+            }
+            ?>
             </div>
         </div>
     </nav>
@@ -100,10 +95,10 @@ if(isset($_GET["userAddress"])){
 
         if(!isset($_SESSION["user"])){
             ?>
-            <script>
-            $(document).ready(function() {
-                $("#exampleModalCenter").modal('show');
-            });
+    <script>
+    $(document).ready(function() {
+        $("#exampleModalCenter").modal('show');
+    });
     </script>
     <?php
         }
@@ -148,6 +143,7 @@ if(isset($_GET["userAddress"])){
                 <label for="projectCategory" class="form-label">Project Category</label>
                 <select id="projectCategory" class="form-select" name="projectCategory" required>
                     <option selected value="">Select</option>
+                    <option value="game">Game</option>
                     <option value="art">Art</option>
                     <option value="comics">Comics</option>
                     <option value="design">Design</option>
@@ -168,12 +164,12 @@ if(isset($_GET["userAddress"])){
             <div class="col-md-6">
                 <label for="fundingGoal" class="form-label">Funding Goal</label>
                 <input type="text" class="form-control" id="fundingGoal" name="fundingGoal"
-                    placeholder="Fenney (1-1000)" required>
+                    placeholder="Finney (1-1000)" required>
             </div>
             <div class="col-md-6">
                 <label for="campaignDuration" class="form-label">Campaign Duration</label>
                 <input type="text" class="form-control" id="campaignDuration" name="campaignDuration"
-                    placeholder="Number of days(1-60)" required>
+                    placeholder="Number of minutes (1-1000)" required>
             </div>
             <?php
 
@@ -181,12 +177,12 @@ if(isset($_GET["userAddress"])){
 
                     ?>
 
-                <div class="col-12">
+            <div class="col-12">
                 <label for="ownerAddress" class="form-label">Project Owner Address</label>
                 <input type="text" class="form-control" id="ownerAddress" name="ownerAddress"
                     value="<?php echo $_SESSION["user"]["userAddress"];?>" readonly="readonly">
             </div>
-                    <?php
+            <?php
                 }
             ?>
             <div class="col-12 d-grid">
